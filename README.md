@@ -19,14 +19,12 @@ npm install @reduxjs/toolkit react-redux
 Para iniciar a aplicação, execute o seguinte comando:
 
 ```bash
-npm install expo
+npm install expo, npx expo start
 # e
-npx expo start
+estar rodando o backend, no docker
 ```
 
 ### Visualização do Aplicativo
-
-Após o QR CODE gerado, o Login é user@hotmail.com senha:123456 , siga estas instruções..
 
 ```bash
 Wifi para ambos aparelhos
