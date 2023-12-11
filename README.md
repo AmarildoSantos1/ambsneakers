@@ -22,6 +22,7 @@ Para iniciar a aplicação, execute o seguinte comando:
 npm install expo, npx expo start
 # e
 estar rodando o backend, no docker
+link do backend( https://github.com/AmarildoSantos1/show_store )
 ```
 
 ### Visualização do Aplicativo
