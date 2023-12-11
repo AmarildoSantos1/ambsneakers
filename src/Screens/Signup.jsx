@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,12 +8,12 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { myColors } from "./../Utils/MyColors";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import Cookies from 'js-cookie';
 import uuid from 'react-native-uuid';
 
 const Signup = () => {
@@ -22,28 +23,36 @@ const Signup = () => {
     email: "",
     password: "",
   });
-  const { email, password, name } = userCredentials;
-
-  const uid = uuid.v4();
-
-  const userAccount = () => {
-    // Simulação de cadastro
-    // Em um ambiente real, você substituiria esta lógica pela interação com o seu backend ou armazenamento local seguro.
-
-    // Aqui, estamos apenas exibindo os dados do usuário cadastrado, um "bd interno".
-    console.log("Usuário cadastrado:", userCredentials);
-
-    // Limpar os campos após o cadastro (simulação)
-    setUserCredentials({
-      name: "",
-      email: "",
-      password: "",
-    });
-
-    Alert.alert("Cadastro realizado com sucesso!");
-  };
 
   const nav = useNavigation();
+
+  const handleSignup = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/Register', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST',
+        },
+        body: JSON.stringify(userCredentials),
+      });
+
+      if (response.ok) {
+        // Sucesso no cadastro
+        Alert.alert("Cadastro realizado com sucesso!");
+        nav.navigate("Login"); // Navega para a tela de login após o cadastro
+      } else {
+        // Falha no cadastro
+        console.error('Falha no cadastro');
+        Alert.alert("Erro", "Falha no cadastro. Por favor, tente novamente.");
+      }
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
+      Alert.alert("Erro", "Ocorreu um erro ao tentar cadastrar. Por favor, tente novamente.");
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: myColors.secondary }}>
       <StatusBar />
@@ -81,7 +90,7 @@ const Signup = () => {
           </Text>
           <TextInput
             maxLength={9}
-            value={name}
+            value={userCredentials.name}
             onChangeText={(val) => {
               setUserCredentials({ ...userCredentials, name: val });
             }}
@@ -105,7 +114,7 @@ const Signup = () => {
             Email
           </Text>
           <TextInput
-            value={email}
+            value={userCredentials.email}
             onChangeText={(val) => {
               setUserCredentials({ ...userCredentials, email: val });
             }}
@@ -137,7 +146,7 @@ const Signup = () => {
             }}
           >
             <TextInput
-              value={password}
+              value={userCredentials.password}
               onChangeText={(val) => {
                 setUserCredentials({ ...userCredentials, password: val });
               }}
@@ -160,23 +169,8 @@ const Signup = () => {
             />
           </View>
 
-          <Text
-            numberOfLines={2}
-            style={{
-              fontSize: 14,
-              fontWeight: "400",
-              color: "black",
-              marginTop: 15,
-              letterSpacing: 0.7,
-              lineHeight: 25,
-              width: "95%",
-              opacity: 0.7,
-            }}
-          >
-            Direitos reservados Amb_neakers
-          </Text>
           <TouchableOpacity
-            onPress={userAccount}
+            onPress={handleSignup}
             style={{
               backgroundColor: myColors.primary,
               marginTop: 30,
