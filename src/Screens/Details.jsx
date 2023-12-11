@@ -10,7 +10,7 @@ import DropBox from "../Components/DropBox";
 import { myColors } from "./../Utils/MyColors";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../Redux/CartSlice";
-
+//import PedidoItem from "../PedidoItem";
 const Details = ({ route }) => {
   const storeData = useSelector((state) => state.CartSlice);
   const dispatch = useDispatch();
@@ -68,7 +68,12 @@ const Details = ({ route }) => {
           <Text style={{ fontSize: 25, color: "black", fontWeight: "600" }}>
             {name.charAt(0).toUpperCase() + name.slice(1)}
           </Text>
+          <TouchableOpacity
+          onPress={() => {  nav.navigate("Favoritos");
+        }}
+        >
           <MaterialIcons name="favorite-border" size={30} color="black" />
+          </TouchableOpacity>
         </View>
         <Text style={{ marginTop: 5, fontSize: 15, color: "grey" }}>
           {quantity}

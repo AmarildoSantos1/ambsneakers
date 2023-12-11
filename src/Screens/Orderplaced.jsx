@@ -4,6 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { myColors } from "../Utils/MyColors";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+//import PedidoItem from '../PedidoItem';
 
 const Orderplaced = () => {
   

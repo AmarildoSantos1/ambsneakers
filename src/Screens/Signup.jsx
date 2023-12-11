@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,13 +7,14 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { myColors } from "./../Utils/MyColors";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import Cookies from 'js-cookie';
 import uuid from 'react-native-uuid';
+import Cookies from "js-cookie";
 
 const Signup = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -23,36 +23,58 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  const { email, password, name } = userCredentials;
 
-  const nav = useNavigation();
+  const uid = uuid.v4();
 
-  const handleSignup = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/Register', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST',
-        },
-        body: JSON.stringify(userCredentials),
-      });
+  const registerUser = () => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/register', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, *'
+          },
+          body: JSON.stringify({ username: name, email, password, password_confirmation: password }),
+        });
 
-      if (response.ok) {
-        // Sucesso no cadastro
-        Alert.alert("Cadastro realizado com sucesso!");
-        nav.navigate("Login"); // Navega para a tela de login após o cadastro
-      } else {
-        // Falha no cadastro
-        console.error('Falha no cadastro');
-        Alert.alert("Erro", "Falha no cadastro. Por favor, tente novamente.");
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Register successful:', data);
+          console.log(data.token)
+          Cookies.set('token', data.token)
+          Alert.alert("Cadastro realizado com sucesso!");
+          setTimeout(() => {
+            nav.navigate("Home");
+          }, 2000); 
+        } else {
+          Alert.alert("Registro falhou!");
+        }
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
-    } catch (error) {
-      console.error('Erro ao cadastrar:', error);
-      Alert.alert("Erro", "Ocorreu um erro ao tentar cadastrar. Por favor, tente novamente.");
-    }
+    };
+    fetchData();
+  }
+
+  const userAccount = () => {
+    
+    console.log("Usuário cadastrado:", userCredentials);
+
+    // Limpar os campos após o cadastro (simulação)
+    setUserCredentials({
+      name: "",
+      email: "",
+      password: "",
+    });
+
+    Alert.alert("Cadastro realizado com sucesso!");
   };
 
+  const nav = useNavigation();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: myColors.secondary }}>
       <StatusBar />
@@ -90,7 +112,7 @@ const Signup = () => {
           </Text>
           <TextInput
             maxLength={9}
-            value={userCredentials.name}
+            value={name}
             onChangeText={(val) => {
               setUserCredentials({ ...userCredentials, name: val });
             }}
@@ -114,7 +136,7 @@ const Signup = () => {
             Email
           </Text>
           <TextInput
-            value={userCredentials.email}
+            value={email}
             onChangeText={(val) => {
               setUserCredentials({ ...userCredentials, email: val });
             }}
@@ -146,7 +168,7 @@ const Signup = () => {
             }}
           >
             <TextInput
-              value={userCredentials.password}
+              value={password}
               onChangeText={(val) => {
                 setUserCredentials({ ...userCredentials, password: val });
               }}
@@ -169,8 +191,23 @@ const Signup = () => {
             />
           </View>
 
+          <Text
+            numberOfLines={2}
+            style={{
+              fontSize: 14,
+              fontWeight: "400",
+              color: "black",
+              marginTop: 15,
+              letterSpacing: 0.7,
+              lineHeight: 25,
+              width: "95%",
+              opacity: 0.7,
+            }}
+          >
+            Direitos reservados Amb_neakers
+          </Text>
           <TouchableOpacity
-            onPress={handleSignup}
+            onPress={registerUser}
             style={{
               backgroundColor: myColors.primary,
               marginTop: 30,

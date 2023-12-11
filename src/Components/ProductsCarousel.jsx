@@ -1,6 +1,6 @@
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import { fruits } from "./../Utils/Date";
+import { shoes,shirt } from "./../Utils/Date";
 import {
   responsiveHeight,
   responsiveWidth,
