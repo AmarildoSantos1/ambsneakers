@@ -11,7 +11,7 @@ import Details from "./src/Screens/Details";
 import Cart from "./src/Screens/Cart";
 import PedidoScreen from "./src/Screens/PedidoScreen";
 import Orderplaced from "./src/Screens/Orderplaced";
-//import PedidoScreen from "./src/Screens/PedidoScreen"; // Importe a tela PedidoScreen
+
 
 const Stack = createNativeStackNavigator();
 
