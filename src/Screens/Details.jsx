@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import DropBox from "../Components/DropBox";
 import { myColors } from "./../Utils/MyColors";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../Redux/CartSlice";
-import Cookies from 'js-cookie';
 
 const Details = ({ route }) => {
   const storeData = useSelector((state) => state.CartSlice);
@@ -17,38 +17,7 @@ const Details = ({ route }) => {
   const productData = route.params.main;
   const { name, price, description, quantity, image_url } = productData;
 
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
-
-  const handleAddToCart = async () => {
-    if (isAddingToCart) {
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:3000/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId: productData.id }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        dispatch(addToCart(productData));
-        Alert.alert("Sucesso", "Item adicionado ao carrinho com sucesso");
-      } else {
-        Alert.alert("Erro", "Falha ao adicionar item ao carrinho");
-      }
-    } catch (error) {
-      console.error('Erro ao adicionar ao carrinho:', error);
-      Alert.alert("Erro", "Falha ao adicionar item ao carrinho");
-    } finally {
-      setIsAddingToCart(false);
-    }
-  };
-
+  const nav = useNavigation();
   return (
     <SafeAreaView style={{ flex: 1, gap: 20, backgroundColor: "white" }}>
       <StatusBar backgroundColor="white" />
@@ -67,6 +36,7 @@ const Details = ({ route }) => {
         <View
           style={{
             flexDirection: "row",
+
             justifyContent: "space-between",
             position: "absolute",
             width: "100%",
@@ -157,7 +127,10 @@ const Details = ({ route }) => {
             </Text>
           </TouchableOpacity>
             <TouchableOpacity
-              onPress={handleAddToCart}
+              onPress={() => {
+                dispatch(addToCart(productData));
+                nav.navigate("Cart");
+              }}
               activeOpacity={0.8}
               style={{
                 backgroundColor: myColors.primary,
@@ -168,11 +141,7 @@ const Details = ({ route }) => {
               }}
             >
               <Text style={{ color: "white", fontSize: 18, fontWeight: "700" }}>
-<<<<<<< HEAD
                 Efetuar Pedido
-=======
-                {isAddingToCart ? "Adicionando..." : "Adicionar ao carrinho"}
->>>>>>> d0b4de26323764af358df86490fcb476bae91cf9
               </Text>
             </TouchableOpacity>
             </>
