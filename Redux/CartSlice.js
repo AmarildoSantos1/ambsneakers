@@ -4,6 +4,7 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: [],
   reducers: {
+    
     addToCart: (state, actions) => {
       const isAvailable = state.find(
         (value) => value.name == actions.payload.name
@@ -14,12 +15,14 @@ const cartSlice = createSlice({
         state.push({ ...actions.payload, quantity: 1 });
       }
     },
+
     removeFromCart: (state, actions) => {
       const newList = state.filter(
         (value) => value.name != actions.payload.name
       );
       return (state = newList);
     },
+    
     incrementQuantity: (state, actions) => {
       const isAvailable = state.find(
         (value) => value.name == actions.payload.name

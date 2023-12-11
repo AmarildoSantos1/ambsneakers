@@ -15,7 +15,7 @@ const Details = ({ route }) => {
   const storeData = useSelector((state) => state.CartSlice);
   const dispatch = useDispatch();
   const productData = route.params.main;
-  const { name, price, pieces, img } = productData;
+  const { name, price, description, quantity, image_url } = productData;
 
   const nav = useNavigation();
   return (
@@ -30,7 +30,7 @@ const Details = ({ route }) => {
             borderBottomRightRadius: 15,
           }}
           source={{
-            uri: img,
+            uri: 'http://localhost:3000/' + image_url,
           }}
         />
         <View
@@ -71,7 +71,7 @@ const Details = ({ route }) => {
           <MaterialIcons name="favorite-border" size={30} color="black" />
         </View>
         <Text style={{ marginTop: 5, fontSize: 15, color: "grey" }}>
-          {pieces}
+          {quantity}
         </Text>
         <Text
           style={{
@@ -107,6 +107,25 @@ const Details = ({ route }) => {
               </Text>
             </TouchableOpacity>
           ) : (
+            <>
+            <TouchableOpacity
+            onPress={() => {
+              dispatch(addToCart(productData));
+              nav.navigate("Home");
+            }}
+            activeOpacity={0.8}
+            style={{
+              backgroundColor: myColors.primary,
+              borderRadius: 10,
+              height: 70,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 18, fontWeight: "700" }}>
+              Adicionar ao carrinho
+            </Text>
+          </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 dispatch(addToCart(productData));
@@ -122,9 +141,10 @@ const Details = ({ route }) => {
               }}
             >
               <Text style={{ color: "white", fontSize: 18, fontWeight: "700" }}>
-                Adicionar ao carrinho
+                Efetuar Pedido
               </Text>
             </TouchableOpacity>
+            </>
           )}
         </View>
       </View>

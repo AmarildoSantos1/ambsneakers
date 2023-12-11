@@ -9,6 +9,7 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { myColors } from "../Utils/MyColors";
 import { useDispatch, useSelector } from "react-redux";
+import Cookies from 'js-cookie';
 import {
   decrementQuantity,
   incrementQuantity,
@@ -25,6 +26,38 @@ const Cart = () => {
   storeData.forEach((element) => {
     amount += element.price;
   });
+
+  const createOrder = (item_ids) => {
+    const fetchData = async () => {
+      try {
+        let token = Cookies.get('token')
+        const response = await fetch('http://localhost:3000/orders', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, *',
+            'Authorization': 'Bearer '+ token
+          },
+          body: JSON.stringify({ status: 'paid', item_ids: item_ids }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          nav.navigate('OrderPlaced')
+        } else {
+          console.error('Login failed');
+          // Handle login failure, display an error message, etc.
+        }
+  
+      } catch (error) {
+  
+        console.error('Error fetching data:', error);
+  
+      }
+  }
+  fetchData();
+  };
 
   return (
     <SafeAreaView
@@ -70,7 +103,7 @@ const Cart = () => {
                 <Image
                   style={{ height: 120, width: 120, resizeMode: "contain" }}
                   source={{
-                    uri: item.img,
+                    uri: 'http://localhost:3000/' + item.image_url,
                   }}
                 />
               </View>
@@ -161,9 +194,14 @@ const Cart = () => {
 
       <View>
         <TouchableOpacity
-          onPress={() => {
-            nav.navigate("OrderPlaced");
-          }}
+          onPress={() => {   
+            let arr = []
+            storeData.forEach((item) => arr.push(item.id) )  
+            createOrder(arr)
+            
+          }
+          // n.navigate("OrderPlaced");
+          }
           activeOpacity={0.8}
           style={{
             backgroundColor: myColors.primary,

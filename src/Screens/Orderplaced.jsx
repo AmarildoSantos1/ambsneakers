@@ -6,12 +6,15 @@ import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 
 const Orderplaced = () => {
+  
   const nav = useNavigation();
+  
   useEffect(() => {
     setTimeout(() => {
       nav.navigate("Home");
     }, 2000);
   }, []);
+
   return (
     <View
       style={{
