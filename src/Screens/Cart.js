@@ -68,6 +68,10 @@ const Cart = () => {
         gap: 15,
       }}
     >
+      {/* Botão de Voltar para a Tela Inicial */}
+      <TouchableOpacity onPress={() => nav.goBack()}>
+        <AntDesign name="arrowleft" size={24} color="black" />
+      </TouchableOpacity>
       <Text style={{ textAlign: "center", fontSize: 24, fontWeight: "500" }}>
         Meu carrinho
       </Text>
