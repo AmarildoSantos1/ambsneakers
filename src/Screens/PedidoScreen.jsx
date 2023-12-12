@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Importe useNavigation
+
 import Cookies from 'js-cookie';
 
 const PedidoScreen = () => {
   const [pedidos, setPedidos] = useState([]);
+  const navigation = useNavigation(); 
 
   useEffect(() => {
     const fetchPedidos = async () => {
@@ -52,6 +55,11 @@ const PedidoScreen = () => {
 
   return (
     <View style={styles.container}>
+      {/* Botão de retorno */}
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Text style={{ color: 'blue', marginBottom: 10 }}>Voltar para a tela inicial</Text>
+      </TouchableOpacity>
+
       <Text style={styles.title}>Lista de Pedidos</Text>
       <FlatList
         data={pedidos}
